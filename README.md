@@ -5,3 +5,8 @@
 你的電腦路徑 > .\env\Scripts\activate  
 如果成功，terminal會出現 (env) PS 你的電腦路徑 >  
 
+
+##備註
+
+此為ccClub學員的練習專案
+
