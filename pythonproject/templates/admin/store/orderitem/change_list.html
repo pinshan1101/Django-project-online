@@ -1,0 +1,68 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('myChart').getContext('2d');
+
+  // 資料處理
+  const chartData = {{ chart_data | safe }};
+
+
+  chartData.forEach((d) => {
+    d.x = new Date(d.date);
+  });
+
+  // 繪製圖表
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartData.map(d => d.product__name),  // X軸
+      datasets: [
+        {
+          label: '訂單總數',
+          data: chartData.map(d => d.y),  // Y軸
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',  // 藍色
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // 允許自定義寬高比
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              autoSkip: true,
+              maxRotation: 90,
+              minRotation: 45,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- 設定圖表大小 -->
+<div style="width: 45%; height: 300px; margin-bottom: 30px;">
+  <canvas id="myChart"></canvas>
+</div>
+
+{{ block.super }}
+{% endblock %}

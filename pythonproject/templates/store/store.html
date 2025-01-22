@@ -1,0 +1,64 @@
+{% extends 'store/main.html'%}
+{% load static %}
+
+{%block content%}
+
+<div class="row">
+
+    <div class="col-md-3">
+        <!-- 顯示商品的類別 -->
+        <h3>商品類別</h3>
+        <div class="row">
+            <div class="col-6 col-md-12">
+                <a href="{% url 'store' %}"
+                class="btn btn-outline-primary
+                 btn-block {% if not category %}
+                 active{% endif %}">全部</a>
+            </div>
+
+             <!-- 空白區域，增加間距 -->
+            <div class="col-12" style="height: 10px;">
+            </div>
+
+            {% for c in categories %}
+            <div class="col-6 col-md-12 mb-2">
+                <a href="{{ c.get_absolute_url }}"
+                class="btn btn-outline-primary
+                btn-block {% if category and category.slug == c.slug %}active{% endif %}">{{ c.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    <div class="col-md-9">
+        <h2>{% if category %}{{ category.name }}
+            {% else %}全部商品{% endif %}</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-4">
+                <img class="thumbnail"
+                src="{{ product.imageURL }}">
+                <div class="box-element product">
+                    <!-- 顯示商品名稱 -->
+                    <h6><strong>{{ product.name }}
+                    </strong></h6>
+                    <hr>
+                    <!-- 顯示加入購物車的按鈕 -->
+                    <button data-product="{{ product.id }}" data-action="add" data-name="{{ product.name }}" class="btn
+                    btn-outline-primary btn-sm add-btn
+                    update-cart">加入購物車</button>
+                    <!-- 顯示商品的價格和單位 -->
+                    <h6 style="display:inline-block; float:right">
+                        NT${{ product.price }} /{{ product.unit }}</h6>
+                </div>
+            </div>
+            {% empty %}
+            <p>此類別沒有商品</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{%endblock content%}
+
